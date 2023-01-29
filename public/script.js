@@ -22,13 +22,16 @@ const register = async (e) => {
         })
         if(token.ok) {
             token = await token.json();
-            localStorage.setItem('token', token);
+            localStorage.setItem('token', token.token);
             await populatePosts();
             window.location.replace('/');
+        } else {
+            throw new Error('Error, try again')
         }
 
     } catch (error) {
-        console.log(error.message);
+        const loginError = document.querySelector('.error');
+        loginError.textContent = error.message;
     }
 
 }
@@ -50,10 +53,13 @@ const login = async(e) => {
             token = await token.json();
             localStorage.setItem('token', token.token);
             window.location.replace('/');
+        } else {
+            throw new Error('Invalid credentials, try again');
         }
 
     } catch (error) {
-        console.log(error.message);
+        const loginError = document.querySelector('.error');
+        loginError.textContent = error.message;
     }
 }
 if(registerSubmit) registerSubmit.addEventListener('click', register);
@@ -90,12 +96,14 @@ const populatePosts = async () => {
                 const description = document.createElement('div');
                 const header = document.createElement('h2'); 
                 const location = document.createElement('h3');
+
                 container.appendChild(image);
                 container.appendChild(description);
                 description.appendChild(header)
                 description.appendChild(location);
-                    header.textContent = post.name;
-                    location.textContent = post.location;
+
+                header.textContent = post.name;
+                location.textContent = post.location;
                 container.classList.add('container');
                 image.src = post.image;
                 image.classList.add('post', 'cropped-ofp');
@@ -126,7 +134,6 @@ const createPost = async (e) => {
             },
             body: formData
         })
-        console.log(imagePath);
         if(imagePath.ok) {
             imagePath = await imagePath.json();
             imagePath = imagePath.image;
@@ -141,21 +148,24 @@ const createPost = async (e) => {
             });
             if(post.ok) {
                 window.location.replace('/posts_page.html');
+            } else {
+                throw new Error('Error, try again');
             }
 
+        } else {
+            throw new Error('Error, try again');
         }
     } catch (error) {
-        console.log(error);
+        const loginError = document.querySelector('.error');
+        loginError.textContent = error.message;
     }
     
 }
 const logout = () => {
     localStorage.removeItem('token');
-    window.location.replace('/');
 }
 
 if(document.URL === 'http://localhost:3000/posts_page.html') {
-    
     populatePosts();
 }
 
@@ -164,4 +174,5 @@ if(createSubmit) createSubmit.addEventListener('click', createPost );
 if(loginBtn && localStorage.getItem('token')) {
     loginBtn.textContent = 'Logout';
     loginBtn.addEventListener('click', logout);
+    loginBtn.setAttribute('href', '/');
 }
