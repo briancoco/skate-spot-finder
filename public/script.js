@@ -12,6 +12,7 @@ const email = document.querySelector('#emailField');
 const password = document.querySelector('#passwordField');
 const registerSubmit = document.querySelector('#registerBtn');
 const loginSubmit = document.querySelector('#loginBtn');
+const createSubmit = document.querySelector('#createBtn');
 const register = async (e) => {
     e.preventDefault();
     //function handles login
@@ -68,7 +69,14 @@ if(loginSubmit) loginSubmit.addEventListener('click', login);
 const populatePosts = async () => {
     //gets posts from backend
     //iterate thru array of posts objs and inject dom
+    const section = document.querySelector('.post-section');
     const token = localStorage.getItem('token');
+    const error = document.createElement('div');
+    if(!token) {
+        error.textContent = 'Please login first.';
+        section.appendChild(error);
+        return;
+    }
     try {
         let posts = await fetch('/api/posts', {
             method: 'get',
@@ -79,8 +87,11 @@ const populatePosts = async () => {
         if(posts.ok) {
             posts = await posts.json();
             posts = posts.posts;
-            const section = document.querySelector('.post-section');
             console.log(posts);
+            if(posts.length === 0) {
+                error.textContent = 'No posts to display.';
+                section.appendChild(error);
+            }
             posts.map((post) => {
                 const container = document.createElement('div');
                 const image = document.createElement('img');
@@ -101,16 +112,55 @@ const populatePosts = async () => {
                 section.appendChild(container);
             })
         }
-    } catch (error) {
-        console.log(error.message);
+    } catch (err) {
+        error.textContent = 'Error! Please try again.'
+        section.appendChild(error);
     }
     
 }
 
-const createPost = () => {
+const createPost = async (e) => {
+    e.preventDefault();
     //creates a post using data from the form
     //calls /api/posts POST route using fetch api
     //then redirects user to posts page
+
+    //first grab post data
+    const name = document.querySelector('#nameField').value;
+    const location = document.querySelector('#locationField').value;
+    const image = document.querySelector('#imgField').files[0];
+    let formData = new FormData();
+    formData.append('image', image);
+    const token = localStorage.getItem('token');
+    try {
+        let imagePath = await fetch('/api/posts/uploadImage', {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            body: formData
+        })
+        console.log(imagePath);
+        if(imagePath.ok) {
+            imagePath = await imagePath.json();
+            imagePath = imagePath.image;
+
+            const post = await fetch('/api/posts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({name, location, image: imagePath})
+            });
+            if(post.ok) {
+                window.location.replace('/posts_page.html');
+            }
+
+        }
+    } catch (error) {
+        console.log(error);
+    }
     
 }
 
@@ -118,3 +168,5 @@ if(document.URL === 'http://localhost:3000/posts_page.html') {
     
     populatePosts();
 }
+
+if(createSubmit) createSubmit.addEventListener('click', createPost );

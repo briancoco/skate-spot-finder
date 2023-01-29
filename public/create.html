@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <title>Create a Post</title>
+    <script src="script.js" defer></script>
 </head>
 <body>
     <header>
@@ -15,17 +16,17 @@
         </ul>
     </header>
 
-    <form action="/action_page.php" class="form_container">
-        <label for="email"><b>Email</b></label>
-        <input type="text" placeholder="Enter Email" name="email" required>
+    <form class="form_container">
+        <label for="Name"><b>Name</b></label>
+        <input id='nameField' type="text" placeholder="Enter Email" name="email" required>
 
         <label for="location"><b>Location</b></label>
-        <input type="text" placeholder="Enter Location" name="location" required>
+        <input id = 'locationField' type="text" placeholder="Enter Location" name="location" required>
 
         <label for="img"><b>Select image:</label></b>
-        <input type="file" id="img" name="img" accept="image/*">
+        <input type="file" id="imgField" name="img" accept="image/*">
 
-        <button type="submit" class="btn">Post</button>
+        <button id='createBtn' type="submit" class="btn">Post</button>
     </form> 
     
 </body>
