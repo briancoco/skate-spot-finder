@@ -1,7 +1,4 @@
-//express app
-    //express is an abstraction on top of the HTTP module
-    //it allows us to develop a backend service in a much
-    //cleaner way
+//express
 const express = require('express');
 const app = express();
 

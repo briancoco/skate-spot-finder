@@ -1,13 +1,4 @@
-
-//login functionality
-//add an event listener to the submit btn
-//the callback function of the event listener
-//will use query selectors to get the info of the data fields
-//then it'll call the register route of our api using fetch
-//then it'll save the token inside localStorage for use later
-//then it'll redirect to post page
-
-//queryselect the login btn
+//DOM elements
 const email = document.querySelector('#emailField');
 const password = document.querySelector('#passwordField');
 const registerSubmit = document.querySelector('#registerBtn');
@@ -70,8 +61,6 @@ if(loginSubmit) loginSubmit.addEventListener('click', login);
 
 //need function to get all the posts from the data base can then inject post elements into dom
 const populatePosts = async () => {
-    //gets posts from backend
-    //iterate thru array of posts objs and inject dom
     const section = document.querySelector('.post-section');
     const token = localStorage.getItem('token');
     const error = document.createElement('div');
@@ -123,11 +112,6 @@ const populatePosts = async () => {
 
 const createPost = async (e) => {
     e.preventDefault();
-    //creates a post using data from the form
-    //calls /api/posts POST route using fetch api
-    //then redirects user to posts page
-
-    //first grab post data
     const name = document.querySelector('#nameField').value;
     const location = document.querySelector('#locationField').value;
     const image = document.querySelector('#imgField').files[0];
@@ -166,8 +150,6 @@ const createPost = async (e) => {
     
 }
 const logout = () => {
-    //removes token from localStorage
-    //redirects user to home page
     localStorage.removeItem('token');
     window.location.replace('/');
 }

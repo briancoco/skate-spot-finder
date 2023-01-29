@@ -24,12 +24,6 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.pre('save', async function() {
-    //pre middleware which hashes password before saving to database
-    //we first generate our salt, then hash the password
-    //salt is a string of random characters which we add to the raw password before hashing
-    //this adds an extra layer of protecting in case of database breach
-    //makes it so that users with the same password have different hashed passwords
-
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
 })
