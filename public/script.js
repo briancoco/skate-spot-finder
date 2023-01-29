@@ -13,6 +13,9 @@ const password = document.querySelector('#passwordField');
 const registerSubmit = document.querySelector('#registerBtn');
 const loginSubmit = document.querySelector('#loginBtn');
 const createSubmit = document.querySelector('#createBtn');
+const loginBtn = document.querySelector('#loginNavBtn');
+
+
 const register = async (e) => {
     e.preventDefault();
     //function handles login
@@ -100,9 +103,8 @@ const populatePosts = async () => {
                 const location = document.createElement('h3');
                 container.appendChild(image);
                 container.appendChild(description);
-                description
-                    .appendChild(header)
-                    .appendChild(location);
+                description.appendChild(header)
+                description.appendChild(location);
                     header.textContent = post.name;
                     location.textContent = post.location;
                 container.classList.add('container');
@@ -163,6 +165,12 @@ const createPost = async (e) => {
     }
     
 }
+const logout = () => {
+    //removes token from localStorage
+    //redirects user to home page
+    localStorage.removeItem('token');
+    window.location.replace('/');
+}
 
 if(document.URL === 'http://localhost:3000/posts_page.html') {
     
@@ -170,3 +178,8 @@ if(document.URL === 'http://localhost:3000/posts_page.html') {
 }
 
 if(createSubmit) createSubmit.addEventListener('click', createPost );
+
+if(loginBtn && localStorage.getItem('token')) {
+    loginBtn.textContent = 'Logout';
+    loginBtn.addEventListener('click', logout);
+}
