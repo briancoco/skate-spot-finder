@@ -5,7 +5,7 @@
     scroll-behavior: smooth;
     list-style-type: none;
     overflow-x: hidden;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-family: system-ui,Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
 body::-webkit-scrollbar{

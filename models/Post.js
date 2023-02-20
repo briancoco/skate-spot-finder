@@ -8,8 +8,23 @@ const PostSchema = new mongoose.Schema({
         maxlength: 80  
     },
     location: {
+        address: {
+            type: String,
+            default: 'N/A'
+        },
+        city: {
+            type: String,
+            default: 'N/A'
+        },
+        state: {
+            type: String,
+            default: 'N/A'
+        },
+
+    },
+    description: {
         type: String,
-        required: [true, 'Please provide name']
+        default: 'No post description'
     },
     image: {
         type: String,

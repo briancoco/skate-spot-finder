@@ -12,9 +12,33 @@ const createPost = async (req, res) => {
 }
 
 const getPost = async (req, res) => {
-    const posts = await Post.find({});
+    let {search} = req.query;
+    if(!search) {
+        search = '';
+    }
+    
+    //by default we'll be on page 1 with 5 posts
+    //when the user clicks on next page in the front-end
+    //it'll make a request on the backend to the getPost Route
+    //and will pass in the page as a query string
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 5;
+    const skip = (page - 1) * limit;
+    
+    let posts =  Post.find({name:{"$regex": search, "$options": 'i'}});
 
+
+
+    posts.skip(skip).limit(limit);
+    posts = await posts;
+    
     res.status(StatusCodes.OK).json({posts});
+    //add functionality so we can split posts into pages
+    //we'll take in an argument defining the # of posts per page
+    //and we'll take in an argument defining page we want to get
+    //we then need to determine how many posts to skip, and then limit the rest of our result to # of posts defined
+
+
 }
 
 const getSinglePost = async (req, res) => {

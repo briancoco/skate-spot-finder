@@ -23,7 +23,9 @@ const login = async (req, res) => {
     }
 
     const token = user.createJWT();
-    res.status(StatusCodes.OK).json({user, token});
+
+    user.attachTokenToCookie(res, token);
+    res.status(StatusCodes.OK).json({msg: "User sucessfully logged in"});
 }
 
 const register = async (req, res) => {
@@ -35,7 +37,9 @@ const register = async (req, res) => {
     const user = await User.create({email, password});
     const token = user.createJWT();
 
-    res.status(StatusCodes.CREATED).json({user, token});
+    user.attachTokenToCookie(res, token);
+
+    res.status(StatusCodes.CREATED).json({msg: "User sucessfully registered"});
 }
 
 module.exports = {
